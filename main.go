@@ -195,6 +195,112 @@ func formatSeverity() string {
 	return w.String()
 }
 
+// pkg represents a package being linted.
+type pkg struct {
+	fset  *token.FileSet
+	files map[string]*file
+
+	typesPkg  *types.Package
+	typesInfo *types.Info
+
+	// sortable is the set of types in the package that implement sort.Interface.
+	sortable map[string]bool
+	// main is whether this is a "main" package.
+	main bool
+
+	problems []Problem
+}
+
+func (p *pkg) lint() []Problem {
+	if err := p.typeCheck(); err != nil {
+		/* TODO(dsymonds): Consider reporting these errors when golint operates on entire packages.
+		if e, ok := err.(types.Error); ok {
+			pos := p.fset.Position(e.Pos)
+			conf := 1.0
+			if strings.Contains(e.Msg, "can't find import: ") {
+				// Golint is probably being run in a context that doesn't support
+				// typechecking (e.g. package files aren't found), so don't warn about it.
+				conf = 0
+			}
+			if conf > 0 {
+				p.errorfAt(pos, conf, category("typechecking"), e.Msg)
+			}
+
+			// TODO(dsymonds): Abort if !e.Soft?
+		}
+		*/
+	}
+
+	p.scanSortable()
+	p.main = p.isMain()
+
+	for _, f := range p.files {
+		f.lint()
+	}
+
+	sort.Sort(byPosition(p.problems))
+
+	return p.problems
+}
+
+// A Linter lints Go source code.
+type Linter struct {
+}
+
+// taken from $HOME$MYGIT/golang/lint/lint.go
+// Lint lints src.
+func (l *Linter) Lint(filename string, src []byte) ([]Problem, error) {
+	return l.LintFiles(map[string][]byte{filename: src})
+}
+
+// LintFiles lints a set of files of a single package.
+// The argument is a map of filename to source.
+func (l *Linter) LintFiles(files map[string][]byte) ([]Problem, error) {
+	pkg := &pkg{
+		fset:  token.NewFileSet(),
+		files: make(map[string]*file),
+	}
+	var pkgName string
+	for filename, src := range files {
+		if isGenerated(src) {
+			continue // See issue #239
+		}
+		f, err := parser.ParseFile(pkg.fset, filename, src, parser.ParseComments)
+		if err != nil {
+			return nil, err
+		}
+		if pkgName == "" {
+			pkgName = f.Name.Name
+		} else if f.Name.Name != pkgName {
+			return nil, fmt.Errorf("%s is in package %s, not %s", filename, f.Name.Name, pkgName)
+		}
+		pkg.files[filename] = &file{
+			pkg:      pkg,
+			f:        f,
+			fset:     pkg.fset,
+			src:      src,
+			filename: filename,
+		}
+	}
+	if len(pkg.files) == 0 {
+		return nil, nil
+	}
+	return pkg.lint(), nil
+}
+
+// isGenerated reports whether the source file is generated code
+// according the rules from https://golang.org/s/generatedcode.
+func isGenerated(src []byte) bool {
+	sc := bufio.NewScanner(bytes.NewReader(src))
+	for sc.Scan() {
+		b := sc.Bytes()
+		if bytes.HasPrefix(b, genHdr) && bytes.HasSuffix(b, genFtr) && len(b) >= len(genHdr)+len(genFtr) {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
 	kingpin.Version(fmt.Sprintf("gometalinter version %s built from %s on %s", version, commit, date))
 	pathsArg := kingpin.Arg("path", "Directories to lint. Defaults to \".\". <path>/... will recurse.").Strings()
