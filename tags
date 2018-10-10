@@ -1991,6 +1991,7 @@ Println	_linters/src/github.com/nbutton23/zxcvbn-go/vendor/github.com/davecgh/go
 Println	_linters/src/github.com/stretchr/objx/vendor/github.com/davecgh/go-spew/spew/config.go	/^func (c *ConfigState) Println(a ...interface{}) (n int, err error) {$/;"	f
 Println	_linters/src/github.com/stretchr/objx/vendor/github.com/davecgh/go-spew/spew/spew.go	/^func Println(a ...interface{}) (n int, err error) {$/;"	f
 Problem	_linters/src/honnef.co/go/tools/lint/lint.go	/^type Problem struct {$/;"	t
+Problem	lint.go	/^type Problem struct {$/;"	t
 Process	_linters/src/golang.org/x/text/unicode/cldr/collate.go	/^func (c Collation) Process(p RuleProcessor) (err error) {$/;"	f
 Process	_linters/src/golang.org/x/tools/imports/imports.go	/^func Process(filename string, src []byte, opt *Options) ([]byte, error) {$/;"	f
 ProcessArgs	_linters/src/honnef.co/go/tools/lint/lintutil/util.go	/^func ProcessArgs(name string, cs []CheckerConfig, args []string) {$/;"	f
