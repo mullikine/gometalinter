@@ -1,4 +1,4 @@
-package main
+package gometalinter
 
 import (
 	"bytes"
@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"go/parser"
+	"go/types"
 	"path/filepath"
 	"regexp"
 	"runtime"
