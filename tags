@@ -1240,14 +1240,12 @@ LineIgnore	_linters/src/honnef.co/go/tools/lint/lint.go	/^type LineIgnore struct
 Lint	_linters/src/honnef.co/go/tools/lint/lint.go	/^func (l *Linter) Lint(lprog *loader.Program, conf *loader.Config) []Problem {$/;"	f
 Lint	_linters/src/honnef.co/go/tools/lint/lintutil/util.go	/^func Lint(cs []lint.Checker, pkgs []string, opt *Options) ([][]lint.Problem, error) {$/;"	f
 Lint	_linters/src/honnef.co/go/tools/unused/unused.go	/^func (l *LintChecker) Lint(j *lint.Job) {$/;"	f
-Lint	lint.go	/^func (l *Linter) Lint(filename string, src []byte) ([]Problem, error) {$/;"	f
 LintAssertNotNil	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintAssertNotNil(j *lint.Job) {$/;"	f
 LintBytesBufferConversions	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintBytesBufferConversions(j *lint.Job) {$/;"	f
 LintBytesCompare	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintBytesCompare(j *lint.Job) {$/;"	f
 LintChecker	_linters/src/honnef.co/go/tools/unused/unused.go	/^type LintChecker struct {$/;"	t
 LintDeclareAssign	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintDeclareAssign(j *lint.Job) {$/;"	f
 LintErrorsNewSprintf	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintErrorsNewSprintf(j *lint.Job) {$/;"	f
-LintFiles	lint.go	/^func (l *Linter) LintFiles(files map[string][]byte) ([]Problem, error) {$/;"	f
 LintForTrue	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintForTrue(j *lint.Job) {$/;"	f
 LintIfBoolCmp	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintIfBoolCmp(j *lint.Job) {$/;"	f
 LintIfReturn	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintIfReturn(j *lint.Job) {$/;"	f
@@ -1271,7 +1269,6 @@ LintTimeUntil	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker)
 LintTrim	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintTrim(j *lint.Job) {$/;"	f
 LintUnnecessaryBlank	_linters/src/honnef.co/go/tools/simple/lint.go	/^func (c *Checker) LintUnnecessaryBlank(j *lint.Job) {$/;"	f
 Linter	_linters/src/honnef.co/go/tools/lint/lint.go	/^type Linter struct {$/;"	t
-Linter	lint.go	/^type Linter struct {$/;"	t
 Load	_linters/src/golang.org/x/tools/go/loader/loader.go	/^func (conf *Config) Load() (*Program, error) {$/;"	f
 Loader	_linters/src/golang.org/x/text/unicode/cldr/decode.go	/^type Loader interface {$/;"	t
 LocalPrefix	_linters/src/golang.org/x/tools/imports/fix.go	/^var LocalPrefix string$/;"	v
@@ -1991,7 +1988,6 @@ Println	_linters/src/github.com/nbutton23/zxcvbn-go/vendor/github.com/davecgh/go
 Println	_linters/src/github.com/stretchr/objx/vendor/github.com/davecgh/go-spew/spew/config.go	/^func (c *ConfigState) Println(a ...interface{}) (n int, err error) {$/;"	f
 Println	_linters/src/github.com/stretchr/objx/vendor/github.com/davecgh/go-spew/spew/spew.go	/^func Println(a ...interface{}) (n int, err error) {$/;"	f
 Problem	_linters/src/honnef.co/go/tools/lint/lint.go	/^type Problem struct {$/;"	t
-Problem	lint.go	/^type Problem struct {$/;"	t
 Process	_linters/src/golang.org/x/text/unicode/cldr/collate.go	/^func (c Collation) Process(p RuleProcessor) (err error) {$/;"	f
 Process	_linters/src/golang.org/x/tools/imports/imports.go	/^func Process(filename string, src []byte, opt *Options) ([]byte, error) {$/;"	f
 ProcessArgs	_linters/src/honnef.co/go/tools/lint/lintutil/util.go	/^func ProcessArgs(name string, cs []CheckerConfig, args []string) {$/;"	f
@@ -3812,7 +3808,6 @@ fieldList	_linters/src/golang.org/x/tools/go/gcimporter15/bimport.go	/^func (p *
 fieldMapMutex	_linters/src/gopkg.in/yaml.v2/yaml.go	/^var fieldMapMutex sync.RWMutex$/;"	v
 fieldName	_linters/src/golang.org/x/tools/go/gcimporter15/bexport.go	/^func (p *exporter) fieldName(f *types.Var) {$/;"	f
 fieldName	_linters/src/golang.org/x/tools/go/gcimporter15/bimport.go	/^func (p *importer) fieldName(parent *types.Package) (pkg *types.Package, name string, alias bool) {$/;"	f
-file	lint.go	/^type file struct {$/;"	t
 fileInDir	_linters/src/golang.org/x/tools/imports/fix.go	/^func fileInDir(file, dir string) bool {$/;"	f
 fileLine	_linters/src/golang.org/x/tools/go/gcimporter15/bexport.go	/^func (p *exporter) fileLine(obj types.Object) (file string, line int) {$/;"	f
 fileOffsetToPos	_linters/src/honnef.co/go/tools/cmd/keyify/position.go	/^func fileOffsetToPos(file *token.File, startOffset, endOffset int) (start, end token.Pos, err error) {$/;"	f
@@ -4238,7 +4233,6 @@ isFile	_linters/src/golang.org/x/tools/cmd/goimports/goimports.go	/^func isFile(
 isFunction	_linters/src/github.com/stretchr/objx/vendor/github.com/stretchr/testify/assert/assertions.go	/^func isFunction(arg interface{}) bool {$/;"	f
 isFunction	_linters/src/honnef.co/go/tools/unused/unused.go	/^func isFunction(obj types.Object) bool {$/;"	f
 isGenerated	_linters/src/honnef.co/go/tools/unused/unused.go	/^func isGenerated(comment string) bool {$/;"	f
-isGenerated	lint.go	/^func isGenerated(src []byte) bool {$/;"	f
 isGoFile	_linters/src/golang.org/x/tools/cmd/goimports/goimports.go	/^func isGoFile(f os.FileInfo) bool {$/;"	f
 isInLoop	_linters/src/honnef.co/go/tools/staticcheck/lint.go	/^func (c *Checker) isInLoop(b *ssa.BasicBlock) bool {$/;"	f
 isInit	_linters/src/golang.org/x/tools/go/callgraph/util.go	/^func isInit(fn *ssa.Function) bool {$/;"	f
@@ -4352,7 +4346,6 @@ linkEnclosing	_linters/src/golang.org/x/text/unicode/cldr/resolve.go	/^func link
 lint	_linters/src/honnef.co/go/tools/lint/lint.go	/^package lint \/\/ import "honnef.co\/go\/tools\/lint"$/;"	p
 lint	_linters/src/honnef.co/go/tools/lint/lintutil/util.go	/^func (runner *runner) lint(lprog *loader.Program, conf *loader.Config) []lint.Problem {$/;"	f
 lint	_linters/src/mvdan.cc/lint/lint.go	/^package lint \/\/ import "mvdan.cc\/lint"$/;"	p
-lint	lint.go	/^func (p *pkg) lint() []Problem {$/;"	f
 lintMatch	_linters/src/honnef.co/go/tools/lint/testutil/util.go	/^var lintMatch = flag.String("lint.match", "", "restrict testdata matches to this pattern")$/;"	v
 linters	_linters/src/mvdan.cc/lint/cmd/metalint/main.go	/^var linters = [...]struct {$/;"	v
 lintersFromConfig	lint.go	/^func lintersFromConfig(config *Config) map[string]*Linter {$/;"	f
@@ -4864,7 +4857,6 @@ pkg	_linters/src/golang.org/x/tools/go/ssa/func.go	/^func (f *Function) pkg() *t
 pkg	_linters/src/golang.org/x/tools/imports/fix.go	/^type pkg struct {$/;"	t
 pkg	_linters/src/golang.org/x/tools/imports/mkindex.go	/^type pkg struct {$/;"	t
 pkg	_linters/src/honnef.co/go/tools/ssa/func.go	/^func (f *Function) pkg() *types.Package {$/;"	f
-pkg	lint.go	/^type pkg struct {$/;"	t
 pkgConfig	_linters/src/golang.org/x/tools/go/loader/cgo_pkgconfig.go	/^func pkgConfig(mode string, pkgs []string) (flags []string, err error) {$/;"	f
 pkgConfigFlags	_linters/src/golang.org/x/tools/go/loader/cgo_pkgconfig.go	/^func pkgConfigFlags(p *build.Package) (cflags []string, err error) {$/;"	f
 pkgExts	_linters/src/golang.org/x/tools/go/gcimporter15/gcimporter.go	/^var pkgExts = [...]string{".a", ".o"}$/;"	v
