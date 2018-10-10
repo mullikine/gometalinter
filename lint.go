@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"go/ast"
 	"os/user"
 	"go/parser"
 	"go/types"
@@ -193,6 +194,15 @@ func formatSeverity() string {
 		fmt.Fprintf(w, "  %s -> %s\n", name, severity)
 	}
 	return w.String()
+}
+
+// file represents a file being linted.
+type file struct {
+	pkg      *pkg
+	f        *ast.File
+	fset     *token.FileSet
+	src      []byte
+	filename string
 }
 
 // pkg represents a package being linted.
