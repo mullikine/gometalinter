@@ -301,59 +301,59 @@ func isGenerated(src []byte) bool {
 	return false
 }
 
-func main() {
-	kingpin.Version(fmt.Sprintf("gometalinter version %s built from %s on %s", version, commit, date))
-	pathsArg := kingpin.Arg("path", "Directories to lint. Defaults to \".\". <path>/... will recurse.").Strings()
-	app := kingpin.CommandLine
-	app.Action(loadDefaultConfig)
-	setupFlags(app)
-	app.Help = fmt.Sprintf(`Aggregate and normalise the output of a whole bunch of Go linters.
-
-PlaceHolder linters:
-
-%s
-
-Severity override map (default is "warning"):
-
-%s
-`, formatLinters(), formatSeverity())
-	kingpin.Parse()
-
-	if config.Install {
-		if config.VendoredLinters {
-			configureEnvironmentForInstall()
-		}
-		installLinters()
-		return
-	}
-
-	configureEnvironment()
-	include, exclude := processConfig(config)
-
-	start := time.Now()
-	paths := resolvePaths(*pathsArg, config.Skip)
-
-	linters := lintersFromConfig(config)
-	err := validateLinters(linters, config)
-	kingpin.FatalIfError(err, "")
-
-	issues, errch := runLinters(linters, paths, config.Concurrency, exclude, include)
-	status := 0
-	if config.JSON {
-		status |= outputToJSON(issues)
-	} else if config.Checkstyle {
-		status |= outputToCheckstyle(issues)
-	} else {
-		status |= outputToConsole(issues)
-	}
-	for err := range errch {
-		warning("%s", err)
-		status |= 2
-	}
-	elapsed := time.Since(start)
-	debug("total elapsed time %s", elapsed)
-	os.Exit(status)
-}
+// func main() {
+// 	kingpin.Version(fmt.Sprintf("gometalinter version %s built from %s on %s", version, commit, date))
+// 	pathsArg := kingpin.Arg("path", "Directories to lint. Defaults to \".\". <path>/... will recurse.").Strings()
+// 	app := kingpin.CommandLine
+// 	app.Action(loadDefaultConfig)
+// 	setupFlags(app)
+// 	app.Help = fmt.Sprintf(`Aggregate and normalise the output of a whole bunch of Go linters.
+// 
+// PlaceHolder linters:
+// 
+// %s
+// 
+// Severity override map (default is "warning"):
+// 
+// %s
+// `, formatLinters(), formatSeverity())
+// 	kingpin.Parse()
+// 
+// 	if config.Install {
+// 		if config.VendoredLinters {
+// 			configureEnvironmentForInstall()
+// 		}
+// 		installLinters()
+// 		return
+// 	}
+// 
+// 	configureEnvironment()
+// 	include, exclude := processConfig(config)
+// 
+// 	start := time.Now()
+// 	paths := resolvePaths(*pathsArg, config.Skip)
+// 
+// 	linters := lintersFromConfig(config)
+// 	err := validateLinters(linters, config)
+// 	kingpin.FatalIfError(err, "")
+// 
+// 	issues, errch := runLinters(linters, paths, config.Concurrency, exclude, include)
+// 	status := 0
+// 	if config.JSON {
+// 		status |= outputToJSON(issues)
+// 	} else if config.Checkstyle {
+// 		status |= outputToCheckstyle(issues)
+// 	} else {
+// 		status |= outputToConsole(issues)
+// 	}
+// 	for err := range errch {
+// 		warning("%s", err)
+// 		status |= 2
+// 	}
+// 	elapsed := time.Since(start)
+// 	debug("total elapsed time %s", elapsed)
+// 	os.Exit(status)
+// }
 
 // nolint: gocyclo
 func processConfig(config *Config) (include *regexp.Regexp, exclude *regexp.Regexp) {
