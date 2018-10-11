@@ -1,4 +1,4 @@
-package main
+package gometalinter
 
 import (
 	"bytes"
@@ -90,17 +90,7 @@ func cliLinterOverrides(app *kingpin.Application, element *kingpin.ParseElement,
 	return nil
 }
 
-func loadDefaultConfig(app *kingpin.Application, element *kingpin.ParseElement, ctx *kingpin.ParseContext) error {
-	if element != nil {
-		return nil
-	}
-
-	for _, elem := range ctx.Elements {
-		if f := elem.OneOf.Flag; f == app.GetFlag("config") || f == app.GetFlag("no-config") {
-			return nil
-		}
-	}
-
+func loadDefaultConfig() error {
 	configFile, found, err := findDefaultConfigFile()
 	if err != nil || !found {
 		return err
@@ -193,58 +183,30 @@ func formatSeverity() string {
 	return w.String()
 }
 
-func main() {
-	kingpin.Version(fmt.Sprintf("gometalinter version %s built from %s on %s", version, commit, date))
-	pathsArg := kingpin.Arg("path", "Directories to lint. Defaults to \".\". <path>/... will recurse.").Strings()
-	app := kingpin.CommandLine
-	app.Action(loadDefaultConfig)
-	setupFlags(app)
-	app.Help = fmt.Sprintf(`Aggregate and normalise the output of a whole bunch of Go linters.
+// I renamed it MLinter because linter struct already exists in linters.go
+type MLinter struct {
+}
 
-PlaceHolder linters:
+func (l *MLinter) Lint(filename string, src []byte) ([]Issue, error) {
 
-%s
-
-Severity override map (default is "warning"):
-
-%s
-`, formatLinters(), formatSeverity())
-	kingpin.Parse()
-
-	if config.Install {
-		if config.VendoredLinters {
-			configureEnvironmentForInstall()
-		}
-		installLinters()
-		return
-	}
+	loadDefaultConfig()
 
 	configureEnvironment()
 	include, exclude := processConfig(config)
 
-	start := time.Now()
-	paths := resolvePaths(*pathsArg, config.Skip)
+	// put filename into a len=1 slice
+	paths := resolvePaths([]string{filename}, config.Skip)
 
 	linters := lintersFromConfig(config)
 	err := validateLinters(linters, config)
-	kingpin.FatalIfError(err, "")
 
-	issues, errch := runLinters(linters, paths, config.Concurrency, exclude, include)
-	status := 0
-	if config.JSON {
-		status |= outputToJSON(issues)
-	} else if config.Checkstyle {
-		status |= outputToCheckstyle(issues)
-	} else {
-		status |= outputToConsole(issues)
+	if err != nil {
+		return nil, err
 	}
-	for err := range errch {
-		warning("%s", err)
-		status |= 2
-	}
-	elapsed := time.Since(start)
-	debug("total elapsed time %s", elapsed)
-	os.Exit(status)
+
+	issues, _ := runLinters(linters, paths, config.Concurrency, exclude, include)
+
+	return outputToIssues(issues), nil
 }
 
 // nolint: gocyclo
@@ -295,6 +257,15 @@ func outputToConsole(issues chan *Issue) int {
 	return status
 }
 
+func outputToIssues(issuesch chan *Issue) []Issue {
+    issues := make([]Issue, 0)
+    for i := range issuesch {
+        issues = append(issues, *i)
+    }
+
+    return issues
+}
+
 func outputToJSON(issues chan *Issue) int {
 	fmt.Println("[")
 	status := 0
@@ -336,10 +307,12 @@ func resolvePaths(paths, skip []string) []string {
 					return filepath.SkipDir
 				case !i.IsDir() && !skip && strings.HasSuffix(p, ".go"):
 					dirs.add(filepath.Clean(filepath.Dir(p)))
+					// dirs.add(filepath.Clean(p)) // DISCARD Make it allow file paths too. see below
 				}
 				return nil
 			})
 		} else {
+			// It appears as though we can add file paths to dirs
 			dirs.add(filepath.Clean(path))
 		}
 	}
