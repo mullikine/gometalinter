@@ -208,8 +208,7 @@ func (l *MLinter) Lint(filename string, src []byte) ([]Issue, error) {
 
 	// err := <-errch
 
-	//return outputToIssues(issues), <-errch
-	return issues, <-errch
+	return outputToIssues(issues), <-errch
 }
 
 // nolint: gocyclo
@@ -260,14 +259,14 @@ func outputToConsole(issues chan *Issue) int {
 	return status
 }
 
-// func outputToIssues(issuesch chan *Issue) []Issue {
-// 	issues := make([]Issue, 0)
-// 	for i := range issuesch {
-// 		issues = append(issues, *i)
-// 	}
+func outputToIssues(issuesch chan *Issue) []Issue {
+	issues := make([]Issue, 0)
+	for i := range issuesch {
+		issues = append(issues, *i)
+	}
 
-// 	return issues
-// }
+	return issues
+}
 
 func outputToJSON(issues chan *Issue) int {
 	fmt.Println("[")
