@@ -204,9 +204,12 @@ func (l *MLinter) Lint(filename string, src []byte) ([]Issue, error) {
 		return nil, err
 	}
 
-	issues, _ := runLinters(linters, paths, config.Concurrency, exclude, include)
+	issues, errch := runLinters(linters, paths, config.Concurrency, exclude, include)
 
-	return outputToIssues(issues), nil
+	// err := <-errch
+
+	//return outputToIssues(issues), <-errch
+	return issues, <-errch
 }
 
 // nolint: gocyclo
@@ -257,14 +260,14 @@ func outputToConsole(issues chan *Issue) int {
 	return status
 }
 
-func outputToIssues(issuesch chan *Issue) []Issue {
-    issues := make([]Issue, 0)
-    for i := range issuesch {
-        issues = append(issues, *i)
-    }
+// func outputToIssues(issuesch chan *Issue) []Issue {
+// 	issues := make([]Issue, 0)
+// 	for i := range issuesch {
+// 		issues = append(issues, *i)
+// 	}
 
-    return issues
-}
+// 	return issues
+// }
 
 func outputToJSON(issues chan *Issue) int {
 	fmt.Println("[")
@@ -307,12 +310,10 @@ func resolvePaths(paths, skip []string) []string {
 					return filepath.SkipDir
 				case !i.IsDir() && !skip && strings.HasSuffix(p, ".go"):
 					dirs.add(filepath.Clean(filepath.Dir(p)))
-					// dirs.add(filepath.Clean(p)) // DISCARD Make it allow file paths too. see below
 				}
 				return nil
 			})
 		} else {
-			// It appears as though we can add file paths to dirs
 			dirs.add(filepath.Clean(path))
 		}
 	}
